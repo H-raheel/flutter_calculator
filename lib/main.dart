@@ -59,7 +59,7 @@ class CalculatorState extends State<Calculator> {
 // end of button
 
   Widget build(BuildContext buildCx) {
-    return new Scaffold(
+    return Scaffold(
       appBar: null,
       backgroundColor: Colors.black,
       body: Column(
@@ -79,9 +79,9 @@ class CalculatorState extends State<Calculator> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    calcButton('AC', const Color(0xffa5a5a5), Colors.black),
-                    calcButton('+/-', const Color(0xffa5a5a5), Colors.black),
-                    calcButton('%', Colors.grey, Colors.black),
+                    calcButton('AC', const Color(0xFFD4D4D2), Colors.black),
+                    calcButton('+/-', const Color(0xFFD4D4D2), Colors.black),
+                    calcButton('%', const Color(0xFFD4D4D2), Colors.black),
                     calcButton('÷', Colors.amber, Colors.white),
                   ],
                 ),
@@ -90,9 +90,11 @@ class CalculatorState extends State<Calculator> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     calcButton(
-                        "7", Color.fromARGB(56, 158, 158, 158), Colors.white),
-                    calcButton("8", const Color(0xff333333), Colors.white),
-                    calcButton("9", const Color(0xff333333), Colors.white),
+                        "7", Color.fromARGB(255, 48, 48, 48), Colors.white),
+                    calcButton(
+                        "8", Color.fromARGB(255, 48, 48, 48), Colors.white),
+                    calcButton(
+                        "9", Color.fromARGB(255, 48, 48, 48), Colors.white),
                     calcButton("x", Colors.amber, Colors.white)
                   ],
                 ),
@@ -101,9 +103,11 @@ class CalculatorState extends State<Calculator> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     calcButton(
-                        "4", Color.fromARGB(56, 158, 158, 158), Colors.white),
-                    calcButton("5", const Color(0xff333333), Colors.white),
-                    calcButton("6", const Color(0xff333333), Colors.white),
+                        "4", Color.fromARGB(255, 48, 48, 48), Colors.white),
+                    calcButton(
+                        "5", Color.fromARGB(255, 48, 48, 48), Colors.white),
+                    calcButton(
+                        "6", Color.fromARGB(255, 48, 48, 48), Colors.white),
                     calcButton("-", Colors.amber, Colors.white)
                   ],
                 ),
@@ -112,9 +116,11 @@ class CalculatorState extends State<Calculator> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     calcButton(
-                        "1", Color.fromARGB(56, 158, 158, 158), Colors.white),
-                    calcButton("2", const Color(0xff333333), Colors.white),
-                    calcButton("3", const Color(0xff333333), Colors.white),
+                        "1", Color.fromARGB(255, 48, 48, 48), Colors.white),
+                    calcButton(
+                        "2", Color.fromARGB(255, 48, 48, 48), Colors.white),
+                    calcButton(
+                        "3", Color.fromARGB(255, 48, 48, 48), Colors.white),
                     calcButton("+", Colors.amber, Colors.white)
                   ],
                 ),
@@ -134,12 +140,13 @@ class CalculatorState extends State<Calculator> {
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.fromLTRB(34, 10, 128, 10),
                         // Adjust styling as needed
-                        backgroundColor: const Color(0xff333333),
+                        backgroundColor: Color.fromARGB(255, 48, 48, 48),
                       ),
                     ),
                     // calcButton(
                     //     "0", Color.fromARGB(56, 158, 158, 158), Colors.white),
-                    calcButton(".", const Color(0xff333333), Colors.white),
+                    calcButton(
+                        ".", Color.fromARGB(255, 48, 48, 48), Colors.white),
                     calcButton("=", Colors.amber, Colors.white),
                   ],
                 ),
