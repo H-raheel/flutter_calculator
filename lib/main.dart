@@ -1,264 +1,270 @@
-import 'dart:async';
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
-  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return new MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Calculator(),
+      title: '',
+      home: new Calculator(),
     );
   }
 }
 
 class Calculator extends StatefulWidget {
-  @override
-  _CalculatorState createState() => _CalculatorState();
+  CalculatorState createState() => CalculatorState();
 }
 
-class _CalculatorState extends State<Calculator> {
-//variables
+class CalculatorState extends State<Calculator> {
   double firstnum = 0.0;
   double secondnum = 0.0;
+  bool firstVal = false;
   var display = '0';
   double result = 0.0;
-  double output = 0.0;
+  bool secondVal = false;
+  var previousOperation = '';
   var operation = '';
   bool cleared = false;
-
-  onButtonClick(value) {
-    if (value == 'AC') {
-      result = 0.0;
-      display = '0';
-      firstnum = 0.0;
-      secondnum = 0.0;
-      operation = '';
-    }
-    // else if (value == '=') {
-    // }
-
-    else if (value == 'x' ||
-        value == '/' ||
-        value == '+' ||
-        value == '-' ||
-        value == '=') {
-      operation = value == '=' ? operation : value;
-      operation.replaceAll('x', '*');
-      cleared = true;
-      if (firstnum == 0.0) {
-        firstnum = double.parse(display);
-        print("ff" + firstnum.toString());
-      } else if (secondnum == 0.0) {
-        secondnum = double.parse(display);
-        print("ss" + secondnum.toString());
-      }
-
-      if (value == '=' || (firstnum != 0.0 && secondnum != 0.0)) {
-        if (firstnum != 0.0 && secondnum != 0.0) {
-          print("inside1" + firstnum.toString());
-          print("inside2" + secondnum.toString());
-        }
-
-        if (value != '=' && result != 0) {
-          firstnum = result;
-          secondnum = double.parse(display);
-          if (firstnum != 0.0 && secondnum != 0.0) {
-            print("inside12" + firstnum.toString());
-            print("inside22" + secondnum.toString());
-          }
-        }
-
-        print("heree");
-        print(firstnum);
-        print(secondnum);
-        print(operation);
-
-        if ((firstnum != 0.0 && secondnum != 0.0)) {
-          print("inside13 " + firstnum.toString());
-          print("inside23 " + secondnum.toString());
-
-          if (operation == '+')
-            result = firstnum + secondnum;
-          else if (operation == '-')
-            result = firstnum - secondnum;
-          else if (operation == '*')
-            result = firstnum * secondnum;
-          else if (operation == '/') result = firstnum / secondnum;
-          display = result.toString();
-          firstnum = result;
-          secondnum = 0.0;
-          result = 0.0;
-          print("r " + result.toString());
-          print("s" + secondnum.toString());
-          print("f" + firstnum.toString());
-        }
-      }
-    }
-
-    // if (firstnum != 0.0 && secondnum != 0.0) {
-    //   firstnum = result;
-    //   secondnum = double.parse(display);
-    //   if (operation == '+')
-    //     result = firstnum + secondnum;
-    //   else if (operation == '-')
-    //     result = firstnum - secondnum;
-    //   else if (operation == '*')
-    //     result = firstnum * secondnum;
-    //   else if (operation == '/') result = firstnum / secondnum;
-    //   display = result.toString();
-    //   print(result);
-    // }
-    else {
-      // initial = '';
-      if (display.startsWith('0') && display.length > 1) {
-        display = display.substring(1);
-      }
-      if (cleared == true) {
-        display = '';
-        cleared = false;
-      }
-
-      display = display + value;
-      print(result);
-    }
-    // if (operation == '+') {
-    //   result = (firstnum + secondnum).toString();
-    // } else if (operation == '-') {
-    //   result = (firstnum - secondnum).toString();
-    // } else if (operation == '*') {
-    //   result = (firstnum * secondnum).toString();
-    // } else if (operation == '/') {
-    //   result = (firstnum / secondnum).toString();
-    // }
-    print(value);
-
-    // setState(() {
-    //   result;
-    // });
-    setState(() {
-      display;
-    });
-  }
-
+  String expression = '';
+  String val1 = '';
+  String val2 = '';
+  //ContextModel cm = ContextModel();
+  //Expression exp = '';
+  Parser p = Parser();
   Widget calcButton(String btntxt, Color btncolor, Color txtcolor) {
     return Container(
       child: MaterialButton(
         onPressed: () {
           onButtonClick(btntxt);
         },
-        child: Text(
-          '$btntxt',
-          style: TextStyle(
-            fontSize: 35,
-            color: txtcolor,
+        child: Center(
+          child: Text(
+            btntxt,
+            style: TextStyle(
+              fontSize: 35,
+              color: txtcolor,
+            ),
           ),
         ),
         shape: CircleBorder(),
         color: btncolor,
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.all(10.0),
       ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-        ),
-        backgroundColor: Colors.black,
-        body: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            //crossAxisAlignment: CrossAxisAlignment.start,
-            children:
-                // const [
-                //   Text("Hello", style: TextStyle(fontSize: 40, color: Colors.white))
-                // ],
-                [
-              Column(
-                // mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Text(display,
-                      style: TextStyle(color: Colors.white, fontSize: 80)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      calcButton('AC', Colors.grey, Colors.black),
-                      calcButton('+/-', Colors.grey, Colors.black),
-                      calcButton('%', Colors.grey, Colors.black),
-                      calcButton('/', Colors.amber, Colors.white),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      calcButton(
-                          "7", Color.fromARGB(56, 158, 158, 158), Colors.white),
-                      calcButton("8", const Color.fromARGB(56, 158, 158, 158),
-                          Colors.white),
-                      calcButton("9", const Color.fromARGB(56, 158, 158, 158),
-                          Colors.white),
-                      calcButton("x", Colors.amber, Colors.white)
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      calcButton(
-                          "4", Color.fromARGB(56, 158, 158, 158), Colors.white),
-                      calcButton("5", const Color.fromARGB(56, 158, 158, 158),
-                          Colors.white),
-                      calcButton("6", const Color.fromARGB(56, 158, 158, 158),
-                          Colors.white),
-                      calcButton("-", Colors.amber, Colors.white)
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      calcButton(
-                          "1", Color.fromARGB(56, 158, 158, 158), Colors.white),
-                      calcButton("2", const Color.fromARGB(56, 158, 158, 158),
-                          Colors.white),
-                      calcButton("3", const Color.fromARGB(56, 158, 158, 158),
-                          Colors.white),
-                      calcButton("+", Colors.amber, Colors.white)
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          onButtonClick('0');
-                        },
-                        child: Text('0',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 35,
-                            )),
-                        style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.fromLTRB(34, 20, 128, 20),
-                          // Adjust styling as needed
-                          backgroundColor:
-                              const Color.fromARGB(56, 158, 158, 158),
-                        ),
+// end of button
+// end of button
+
+  Widget build(BuildContext buildCx) {
+    return new Scaffold(
+      appBar: null,
+      backgroundColor: Colors.black,
+      body: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          //crossAxisAlignment: CrossAxisAlignment.start,
+          children:
+              // const [
+              //   Text("Hello", style: TextStyle(fontSize: 40, color: Colors.white))
+              // ],
+              [
+            Column(
+              // mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                Text(display,
+                    style: TextStyle(color: Colors.white, fontSize: 80)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    calcButton('AC', const Color(0xffa5a5a5), Colors.black),
+                    calcButton('+/-', const Color(0xffa5a5a5), Colors.black),
+                    calcButton('%', Colors.grey, Colors.black),
+                    calcButton('÷', Colors.amber, Colors.white),
+                  ],
+                ),
+                const SizedBox(height: 15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    calcButton(
+                        "7", Color.fromARGB(56, 158, 158, 158), Colors.white),
+                    calcButton("8", const Color(0xff333333), Colors.white),
+                    calcButton("9", const Color(0xff333333), Colors.white),
+                    calcButton("x", Colors.amber, Colors.white)
+                  ],
+                ),
+                const SizedBox(height: 15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    calcButton(
+                        "4", Color.fromARGB(56, 158, 158, 158), Colors.white),
+                    calcButton("5", const Color(0xff333333), Colors.white),
+                    calcButton("6", const Color(0xff333333), Colors.white),
+                    calcButton("-", Colors.amber, Colors.white)
+                  ],
+                ),
+                const SizedBox(height: 15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    calcButton(
+                        "1", Color.fromARGB(56, 158, 158, 158), Colors.white),
+                    calcButton("2", const Color(0xff333333), Colors.white),
+                    calcButton("3", const Color(0xff333333), Colors.white),
+                    calcButton("+", Colors.amber, Colors.white)
+                  ],
+                ),
+                const SizedBox(height: 15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        onButtonClick('0');
+                      },
+                      child: Text('0',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 35,
+                          )),
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.fromLTRB(34, 10, 128, 10),
+                        // Adjust styling as needed
+                        backgroundColor: const Color(0xff333333),
                       ),
-                      // calcButton(
-                      //     "0", Color.fromARGB(56, 158, 158, 158), Colors.white),
-                      calcButton(".", const Color.fromARGB(56, 158, 158, 158),
-                          Colors.white),
-                      calcButton("=", const Color.fromARGB(56, 158, 158, 158),
-                          Colors.white),
-                    ],
-                  ),
-                ],
-              )
-            ]));
+                    ),
+                    // calcButton(
+                    //     "0", Color.fromARGB(56, 158, 158, 158), Colors.white),
+                    calcButton(".", const Color(0xff333333), Colors.white),
+                    calcButton("=", Colors.amber, Colors.white),
+                  ],
+                ),
+              ],
+            )
+          ]),
+    );
+  } // end of state class
+
+  onButtonClick(value) {
+    // Replace 'x' with '*' and '÷' with '/'
+    value = value.replaceAll('x', '*');
+    value = value.replaceAll('÷', '/');
+
+    // Store value in val2
+    val2 = value;
+
+    // Check if both val1 and val2 are operators
+    if ((val1 == '-' ||
+            val1 == '+' ||
+            val1 == '/' ||
+            val1 == '*' ||
+            val1 == '=') &&
+        (val2 == '-' ||
+            val2 == '+' ||
+            val2 == '/' ||
+            val2 == '*' ||
+            val2 == '=')) {
+      val1 = value;
+      previousOperation = value;
+      return;
+    }
+
+    if (value == 'AC') {
+      // Reset all variables
+      result = 0.0;
+      display = '0';
+      firstnum = 0.0;
+      secondnum = 0.0;
+      operation = '';
+      previousOperation = '';
+      secondVal = false;
+      firstVal = false;
+      expression = '';
+    } else if (value == '*' ||
+        value == '/' ||
+        value == '+' ||
+        value == '-' ||
+        value == '=') {
+      // Handle operator input
+      if (previousOperation != '') {
+        expression =
+            expression.substring(0, expression.length - 1) + previousOperation;
+        previousOperation = '';
+      }
+      operation = value;
+      cleared = true;
+
+      if (firstVal == false) {
+        firstnum = double.parse(display);
+        firstVal = true;
+        expression = expression + firstnum.toString() + operation;
+      } else if (secondVal == false && display != "") {
+        secondnum = double.parse(display);
+        expression = expression + secondnum.toString();
+        secondVal = true;
+      }
+
+      if (secondVal == true && operation != '') {
+        if (operation == '+' || operation == '-' || operation == '=') {
+          try {
+            // Evaluate the expression
+            Parser p = Parser();
+            ContextModel cm = ContextModel();
+            Expression exp = p.parse(expression);
+            result = exp.evaluate(EvaluationType.REAL, cm);
+            display = result.toString();
+            firstnum = result;
+            secondnum = 0.0;
+            cleared = true;
+            secondVal = false;
+          } catch (error) {
+            display = 'ERROR';
+          }
+
+          if (operation != '=') {
+            expression = expression + operation;
+            operation = '';
+          }
+        } else if (operation == '*' || operation == '/') {
+          expression = expression + operation;
+          secondnum = 0.0;
+          secondVal = false;
+        }
+      }
+    } else if (value == '%') {
+      // Calculate percentage
+      expression.replaceFirst(
+          display, ((double.parse(display)) / 100).toString());
+      display = ((double.parse(display)) / 100).toString();
+    } else if (value == '+/-') {
+      // Change sign
+      expression.replaceFirst(
+          display, ((double.parse(display)) * -1).toString());
+      display = ((double.parse(display)) * -1).toString();
+    } else {
+      // Handle number input
+      if (display.startsWith('0')) {
+        display = display.substring(1);
+      }
+      if (cleared == true) {
+        display = '';
+        cleared = false;
+      }
+      if (value == '.' && display.contains('.')) {
+        display = display;
+      } else {
+        display = display + value;
+      }
+    }
+
+    // Update val1 and display
+    val1 = value;
+    setState(() {
+      display;
+    });
   }
 }
